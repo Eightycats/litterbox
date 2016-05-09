@@ -77,7 +77,6 @@ public class FileUtils
 
     public static boolean rename (File file, File newFile) throws FileNotFoundException
     {
-
         boolean success;
 
         if (!file.exists()) {
@@ -113,7 +112,6 @@ public class FileUtils
     public static void copy (File source, File destination) throws FileNotFoundException,
         IOException
     {
-
         if (!source.exists()) {
             throw new FileNotFoundException("File [" + source.getPath() + "] does not exist.");
         }
@@ -145,12 +143,10 @@ public class FileUtils
     public static void copyFile (File source, File destination) throws FileNotFoundException,
         IOException
     {
-
         // make sure the parent destination directories exists
         makeParentDirs(destination);
 
         InputStream in = new FileInputStream(source);
-
         try {
             OutputStream out = new FileOutputStream(destination);
             try {
@@ -167,7 +163,6 @@ public class FileUtils
     public static void deepCopy (File source, File destination) throws IOException
     {
         if (source.isDirectory()) {
-
             // make sure that the destination dir is not an existing file
             if (destination.exists() && !destination.isDirectory()) {
                 throw new IOException("Could not copy directory [" + source.getPath()
@@ -179,7 +174,6 @@ public class FileUtils
             destination.mkdirs();
 
             File[] children = source.listFiles();
-
             for (int i = 0; i < children.length; i++) {
                 // create a destination file with the same name
                 // as the source child file
@@ -222,7 +216,6 @@ public class FileUtils
 
         // The directory is a file or is now empty and can be deleted.
         return success && file.delete();
-
     }
 
     public static void makeParentDirs (File file)
@@ -241,7 +234,6 @@ public class FileUtils
     public static void insert (String filePath, String text, long offset)
         throws FileNotFoundException, IOException
     {
-
         File file = new File(filePath);
         FileReader fileReader = new FileReader(file);
         BufferedReader reader = new BufferedReader(fileReader);
@@ -255,7 +247,6 @@ public class FileUtils
         offset = Math.min(offset, file.length());
 
         try {
-
             char[] next = new char[1];
             int read = reader.read(next);
             long total = 0;
@@ -385,7 +376,6 @@ public class FileUtils
         }
 
         return match;
-
     }
 
     /**
