@@ -11,7 +11,6 @@ public class ThreadLocalDateFormat extends ThreadLocal<DateFormat>
 
     public ThreadLocalDateFormat (String format)
     {
-        super();
         _dateFormat = format;
     }
 
