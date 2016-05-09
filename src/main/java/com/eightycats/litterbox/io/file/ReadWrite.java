@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 
 import com.eightycats.litterbox.io.StreamUtils;
 
@@ -15,6 +16,21 @@ import com.eightycats.litterbox.io.StreamUtils;
  */
 public abstract class ReadWrite extends Cat
 {
+    /**
+     * The output file path.
+     */
+    protected String _outputPath;
+
+    /**
+     * Output encoding.
+     */
+    protected String _outputEncoding;
+
+    /**
+     * Saves off the path to the temp file, if we had to use one.
+     */
+    protected String _tempPath;
+
     /**
      * No output file specified. Will try to modify the input file in place.
      */
@@ -47,21 +63,27 @@ public abstract class ReadWrite extends Cat
             String outputPath;
             // if not output file was specified, use a temp file
             if (_outputPath == null) {
-                outputPath = _tempPath = File.createTempFile("littlebox", "tmp").getCanonicalPath();
+                outputPath = _tempPath = File.createTempFile("littlebox", ".txt").getCanonicalPath();
             } else {
                 outputPath = _outputPath;
             }
-            String outputEncoding = _outputEncoding != null ? _outputEncoding : inputEncoding;
-            setWriter(new OutputStreamWriter(new FileOutputStream(outputPath),
+            String outputEncoding = _outputEncoding != null ? _outputEncoding :
+                getEncoding(inputEncoding);
+            read(filePath, inputEncoding, new OutputStreamWriter(new FileOutputStream(outputPath),
                 outputEncoding));
-            // read the input file, process each line
-            super.read(filePath, inputEncoding);
 
         } catch (UnsupportedEncodingException unex) {
             unex.printStackTrace();
         } catch (IOException fex) {
             fex.printStackTrace();
         }
+    }
+
+    protected void read (String filePath, String inputEncoding, Writer output)
+    {
+        setWriter(output);
+        // read the input file, process each line
+        super.read(filePath, inputEncoding);
     }
 
     @Override
@@ -92,19 +114,4 @@ public abstract class ReadWrite extends Cat
     {
         _outputEncoding = encoding;
     }
-
-    /**
-     * The output file path.
-     */
-    protected String _outputPath;
-
-    /**
-     * Output encoding.
-     */
-    protected String _outputEncoding;
-
-    /**
-     * Saves off the path to the temp file, if we had to use one.
-     */
-    protected String _tempPath;
 }

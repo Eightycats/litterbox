@@ -36,6 +36,8 @@ public class Replace extends Cat
 
     public static void main (String[] args)
     {
-        new Replace(args[1], args[2]).read(args[0]);
+        Replace replacer = new Replace(args[1], args[2]);
+        replacer.setVerbose(true);
+        CatWriter.process(args[0], replacer);
     }
 }

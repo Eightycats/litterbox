@@ -40,12 +40,12 @@ public class DirectoryIterator
     /**
      * Starts processing the parent directory. Applies the given reader to each file we find.
      */
-    public void run (LineReader fileReader)
+    public void run (FileReader fileReader)
     {
         run(fileReader, new File(_parent));
     }
 
-    protected void run (LineReader fileReader, File parentDir)
+    protected void run (FileReader fileReader, File parentDir)
     {
         File[] files;
         if (_filter != null) {

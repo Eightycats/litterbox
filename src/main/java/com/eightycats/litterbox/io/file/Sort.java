@@ -1,7 +1,6 @@
 package com.eightycats.litterbox.io.file;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.List;
 /**
  * Reads a file, sorts it, and spits out the result.
  */
-public class Sort extends LineReader
+public class Sort extends CatResults
 {
     protected List<String> _results = new ArrayList<String>();
 
@@ -32,23 +31,17 @@ public class Sort extends LineReader
         super.done(file);
     }
 
-    public List<String> getResults ()
+    @Override
+    public Iterable<String> getResults ()
     {
         return _results;
     }
 
-    public void dump ()
-    {
-        List<String> lines = getResults();
-        for (String line : lines) {
-            System.out.println(line);
-        }
-    }
-
-    public static void main (String[] args) throws IOException
+    public static void main (String[] args)
     {
         Sort sorter = new Sort();
-        sorter.read(args[0]);
-        sorter.dump();
+        sorter.setVerbose(true);
+        // file will get sorter in place
+        CatWriter.process(args[0], sorter);
     }
 }

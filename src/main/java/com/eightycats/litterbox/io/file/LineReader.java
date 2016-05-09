@@ -12,19 +12,21 @@ import java.nio.charset.StandardCharsets;
  * Base class for reading a text file line by line.
  */
 public abstract class LineReader
+    implements FileReader
 {
+    @Override
     public void read (String filePath)
     {
-        read(filePath, StandardCharsets.UTF_8.name());
+        read(filePath, null);
     }
 
+    @Override
     public void read (String filePath, String encoding)
     {
         File file = new File(filePath);
         start(file);
         try {
-
-            BufferedReader in = createReader(file, encoding);
+            BufferedReader in = createReader(file, getEncoding(encoding));
             try {
                 String line = in.readLine();
                 while (line != null) {
@@ -54,7 +56,6 @@ public abstract class LineReader
      */
     protected void start (File file)
     {
-
     }
 
     /**
@@ -62,11 +63,18 @@ public abstract class LineReader
      */
     protected void done (File file)
     {
-
     }
 
     /**
      * Called line by line to do something with the file content.
      */
     protected abstract void process (String line);
+
+    /**
+     * If the given encoding is null, this returns UTF-8 by default.
+     */
+    protected String getEncoding (String encoding)
+    {
+        return encoding == null ? StandardCharsets.UTF_8.name() : encoding;
+    }
 }

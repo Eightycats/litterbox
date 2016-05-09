@@ -15,6 +15,11 @@ public class Cat extends LineReader
      */
     protected PrintWriter _out;
 
+    /**
+     * If true, also print output to System.out (in addition to the current PrintWriter).
+     */
+    protected boolean _verbose;
+
     public Cat ()
     {
         // by default, send output, if any, to stdout
@@ -32,6 +37,9 @@ public class Cat extends LineReader
     protected void print (String text)
     {
         _out.print(text);
+        if (_verbose) {
+            System.out.print(text);
+        }
     }
 
     /**
@@ -40,6 +48,9 @@ public class Cat extends LineReader
     protected void println (String line)
     {
         _out.println(line);
+        if (_verbose) {
+            System.out.println(line);
+        }
     }
 
     @Override
@@ -52,6 +63,14 @@ public class Cat extends LineReader
     protected void done (File file)
     {
         _out.flush();
+    }
+
+    /**
+     * If true, output will also get printed to System.out.
+     */
+    public void setVerbose (boolean verbose)
+    {
+        _verbose = verbose;
     }
 
     public static void main (String[] args)

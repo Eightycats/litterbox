@@ -1,14 +1,12 @@
 package com.eightycats.litterbox.io.file;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.LinkedHashSet;
-import java.util.Set;
 
 /**
  * Removes duplicate lines from a file. Note that this trims the lines.
  */
-public class Unique extends LineReader
+public class Unique extends CatResults
 {
     protected LinkedHashSet<String> _existing = new LinkedHashSet<String>();
 
@@ -24,23 +22,17 @@ public class Unique extends LineReader
         _existing.add(line.trim());
     }
 
-    public Set<String> getResults ()
+    @Override
+    public Iterable<String> getResults ()
     {
         return _existing;
     }
 
-    public void dump ()
-    {
-        Set<String> lines = getResults();
-        for (String line : lines) {
-            System.out.println(line);
-        }
-    }
-
-    public static void main (String[] args) throws IOException
+    public static void main (String[] args)
     {
         Unique unique = new Unique();
-        unique.read(args[0]);
-        unique.dump();
+        unique.setVerbose(true);
+        // remove duplicates in place
+        CatWriter.process(args[0], unique);
     }
 }

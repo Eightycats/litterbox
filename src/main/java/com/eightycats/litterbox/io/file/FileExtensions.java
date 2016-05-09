@@ -45,7 +45,6 @@ public abstract class FileExtensions
         }
 
         return match;
-
     }
 
     /**
