@@ -1,3 +1,17 @@
+/**
+ * Copyright 2016 Matthew A Jensen <eightycats@gmail.com>
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
 package com.eightycats.litterbox.properties;
 
 import java.io.BufferedReader;
@@ -5,19 +19,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 /**
  * Reads an OrderedProperties instance from an input stream.
- *
- * Most of the functionality here duplicates code from java.util.Properties, because
- * we want this class's behavior to mimic the way the Properties class loads and parses properties.
- * Some functions in the Properties class only had private access, so here we are...
  */
 public class OrderedPropertyReader
 {
     /**
      * Reads properties and comments from a stream and adds them to the given OrderedProperties
      * instance.
-     *
      *
      * @param properties
      *            OrderedProperties any properties and comments found will be added to this output
@@ -27,7 +38,8 @@ public class OrderedPropertyReader
      * @throws IOException
      *             thrown on any IO errors.
      */
-    public static void read (OrderedProperties properties, InputStream input) throws IOException
+    public static void read (OrderedProperties properties, InputStream input)
+        throws IOException
     {
         InputStreamReader inputReader = new InputStreamReader(input,
             PropertyConstants.DEFAULT_CHARSET);
@@ -69,11 +81,10 @@ public class OrderedPropertyReader
 
                 // Convert any escape sequences (uuencoded chars, '\n', etc.)
                 // and then store new key and value
-                key = convert(key);
-                value = convert(value);
+                key = StringEscapeUtils.unescapeJava(key);
+                value = StringEscapeUtils.unescapeJava(value);
 
                 properties.put(key, value);
-
             }
 
             line = buffer.readLine();
@@ -111,14 +122,11 @@ public class OrderedPropertyReader
         // increment the start index until a non-whitespace char
         // is found or until we run out of string
         for (; startIndex < length; startIndex++) {
-
             char nextChar = s.charAt(startIndex);
             if (!Character.isWhitespace(nextChar)) {
                 break;
             }
-
         }
-
         return startIndex;
     }
 
@@ -170,91 +178,11 @@ public class OrderedPropertyReader
         return (slashCount % 2 == 1);
     }
 
-    /*
-     * Converts encoded &#92;uxxxx to unicode chars and changes special saved chars to their
-     * original forms.
-     *
-     * This is taken from java.util.Properties.
-     */
-    public static String convert (String theString)
-    {
-
-        char aChar;
-        int length = theString.length();
-        StringBuffer outBuffer = new StringBuffer(length);
-
-        for (int x = 0; x < length;) {
-            aChar = theString.charAt(x++);
-            if (aChar == '\\') {
-                aChar = theString.charAt(x++);
-                if (aChar == 'u') {
-                    // Read the xxxx
-                    int value = 0;
-                    for (int i = 0; i < 4; i++) {
-                        aChar = theString.charAt(x++);
-                        switch (aChar) {
-                        case '0':
-                        case '1':
-                        case '2':
-                        case '3':
-                        case '4':
-                        case '5':
-                        case '6':
-                        case '7':
-                        case '8':
-                        case '9':
-                            value = (value << 4) + aChar - '0';
-                            break;
-                        case 'a':
-                        case 'b':
-                        case 'c':
-                        case 'd':
-                        case 'e':
-                        case 'f':
-                            value = (value << 4) + 10 + aChar - 'a';
-                            break;
-                        case 'A':
-                        case 'B':
-                        case 'C':
-                        case 'D':
-                        case 'E':
-                        case 'F':
-                            value = (value << 4) + 10 + aChar - 'A';
-                            break;
-                        default:
-                            throw new IllegalArgumentException("Malformed \\uxxxx encoding.");
-                        }
-                    }
-                    outBuffer.append((char) value);
-                } else {
-                    if (aChar == 't')
-                        aChar = '\t';
-                    else if (aChar == 'r')
-                        aChar = '\r';
-                    else if (aChar == 'n')
-                        aChar = '\n';
-                    else if (aChar == 'f')
-                        aChar = '\f';
-                    outBuffer.append(aChar);
-                }
-            } else
-                outBuffer.append(aChar);
-        }
-        return outBuffer.toString();
-    }
-
     /**
      * Utility method for getting the end a property name from a line of input.
-     *
-     * @param line
-     *            String
-     * @param keyStartIndex
-     *            int
-     * @return int
      */
-    private static int getKeyEndIndex (String line, int keyStartIndex)
+    protected static int getKeyEndIndex (String line, int keyStartIndex)
     {
-
         // the key string ends where the key-value separator begins
         int separatorIndex = keyStartIndex;
         int length = line.length();
@@ -273,38 +201,25 @@ public class OrderedPropertyReader
         }
 
         return separatorIndex;
-
     }
 
     /**
-     * Utility method for getting the start a property value from a line of input.
-     *
-     * @param line
-     *            String
-     * @param keyEndIndex
-     *            int
-     * @return int
+     * Gets the start a property value from a line of input.
      */
-    private static int getValueStartIndex (String line, int keyEndIndex)
+    protected static int getValueStartIndex (String line, int keyEndIndex)
     {
-
         // Skip over whitespace after key if any
         int valueStart = skipWhitespace(line, keyEndIndex);
         int length = line.length();
 
         // Skip over the key value separator character (e.g. '=') if any
         if (valueStart < length) {
-
             char nextChar = line.charAt(valueStart);
 
             if (PropertyConstants.STRICT_SEPARATORS.indexOf(nextChar) != -1) {
                 valueStart++;
             }
-
         }
-
         return valueStart;
-
     }
-
 }
