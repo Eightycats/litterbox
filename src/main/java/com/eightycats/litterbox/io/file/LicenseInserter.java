@@ -14,45 +14,40 @@
 
 package com.eightycats.litterbox.io.file;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
-/**
- * Takes the output from query in the mysql client and converts it to CSV.
- */
-public class QueryResultsToCSV extends ReadWrite
+public class LicenseInserter extends Cat
 {
-    public QueryResultsToCSV (String outputPath)
+    protected String _license;
+
+    public LicenseInserter (String license)
     {
-        super(outputPath);
+        _license = license;
     }
 
     @Override
-    protected void process (String line)
+    protected void start (File file)
     {
-        line = line.replaceAll("\\|", ",");
-        if (line.startsWith(",")) {
-            line = line.substring(1);
-        }
-
-        line = line.replaceAll("\\+-*", "");
-        line = line.trim();
-
-        if (line.length() > 0) {
-            println(line);
-        }
-    }
-
-    public static void processFile (String fileName)
-        throws FileNotFoundException
-    {
-        new QueryResultsToCSV(fileName.replaceAll(".txt", ".csv")).read(fileName);
+        println(_license);
+        super.start(file);
     }
 
     public static void main (String[] args)
     {
         try {
-            processFile(args[0]);
+            String license = WholeFile.readFile("/Users/matt/temp/lecense.txt");
+            CatWriter inserter = new CatWriter(new LicenseInserter(license));
+            DirectoryIterator iterator = new DirectoryIterator(args[0]);
+            iterator.setNameFilter(".java");
+            iterator.run(inserter);
+
         } catch (FileNotFoundException ex) {
+            // TODO Auto-generated catch block
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            // TODO Auto-generated catch block
             ex.printStackTrace();
         }
     }
