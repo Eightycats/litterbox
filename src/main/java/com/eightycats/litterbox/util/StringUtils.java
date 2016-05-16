@@ -45,7 +45,7 @@ public class StringUtils
             if (result.length() != 0) {
                 result.append(" ");
             }
-            result.append(toSentenceCase(part));
+            result.append(toSentenceCase(part.toLowerCase()));
         }
         return result.toString();
     }
@@ -65,7 +65,6 @@ public class StringUtils
     {
         String result = "";
         if (title != null && !title.isEmpty()) {
-            title = title.toLowerCase();
             if (force || shouldTitleCase(title)) {
                 result += Character.toUpperCase(title.charAt(0));
                 if (title.length() > 1) {
