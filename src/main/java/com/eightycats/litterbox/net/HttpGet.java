@@ -28,6 +28,14 @@ import java.net.URLConnection;
  */
 public class HttpGet
 {
+    public static String get (String url)
+        throws IOException
+    {
+        StringBuilder response = new StringBuilder();
+        get(url, response);
+        return response.toString();
+    }
+
     public static int get (String url, StringBuilder response)
         throws IOException
     {
