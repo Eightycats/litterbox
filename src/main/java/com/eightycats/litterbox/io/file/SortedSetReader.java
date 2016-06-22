@@ -16,10 +16,8 @@ public class SortedSetReader extends SetReader
 
     public static void main (String[] args)
     {
-        SetReader lines = new SetReader();
+        SortedSetReader lines = new SortedSetReader();
         lines.read(args[0]);
-        for (String line : lines.getResults()) {
-            System.out.println(line);
-        }
+        lines.dump();
     }
 }

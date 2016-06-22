@@ -52,8 +52,6 @@ public class SetReader extends CatResults
     {
         SetReader lines = new SetReader();
         lines.read(args[0]);
-        for (String line : lines.getResults()) {
-            System.out.println(line);
-        }
+        lines.dump();
     }
 }
