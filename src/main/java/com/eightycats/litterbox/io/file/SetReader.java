@@ -17,28 +17,23 @@ package com.eightycats.litterbox.io.file;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * Reads the lines of a file into a Set.
  */
-public class SetReader extends LineReader
+public class SetReader extends CatResults
 {
-    protected Set<String> _lines = new HashSet<String>();
+    protected Set<String> _lines;
 
-    public void setSorted (boolean sorted)
+    protected Set<String> createSet ()
     {
-        if (sorted) {
-            _lines = new TreeSet<String>(_lines);
-        } else {
-            _lines = new HashSet<String>(_lines);
-        }
+        return new HashSet<String>();
     }
 
     @Override
     protected void start (File file)
     {
-        _lines.clear();
+        _lines = createSet();
     }
 
     @Override
@@ -47,6 +42,7 @@ public class SetReader extends LineReader
         _lines.add(line);
     }
 
+    @Override
     public Set<String> getResults ()
     {
         return _lines;
@@ -55,7 +51,6 @@ public class SetReader extends LineReader
     public static void main (String[] args)
     {
         SetReader lines = new SetReader();
-        lines.setSorted(true);
         lines.read(args[0]);
         for (String line : lines.getResults()) {
             System.out.println(line);
