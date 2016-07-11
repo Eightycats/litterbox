@@ -65,7 +65,7 @@ public class StringUtils
     {
         String result = "";
         if (title != null && !title.isEmpty()) {
-            if (force || shouldTitleCase(title)) {
+            if (force || shouldTitleCase(title) || result.isEmpty()) {
                 result += Character.toUpperCase(title.charAt(0));
                 if (title.length() > 1) {
                     result += title.substring(1);
