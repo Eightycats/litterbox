@@ -30,6 +30,14 @@ import java.util.Map.Entry;
  */
 public class HttpPost
 {
+    public static String post (String url, Map<String, String> params)
+        throws IOException
+    {
+        StringBuilder response = new StringBuilder();
+        post(url, params, response);
+        return response.toString();
+    }
+
     public static int post (String url, Map<String, String> params, StringBuilder response)
         throws IOException
     {
