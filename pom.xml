@@ -21,7 +21,7 @@
 
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
-    <testSourceDirectory>tests/src/java</testSourceDirectory>
+    <testSourceDirectory>src/tests/java</testSourceDirectory>
     <outputDirectory>dist/classes</outputDirectory>
     <plugins>
       <plugin>
