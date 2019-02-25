@@ -14,15 +14,17 @@
 
 package com.eightycats.litterbox.logging;
 
-public interface ILogger
+interface ILogger
 {
-   public void log( String message );
+   void log( Object message );
 
-   public void debug( String message );
+   void debug( Object message );
 
-   public void warning( String message );
+   void warning( Object message );
 
-   public void error( String message );
+   void error( Object message );
 
-   public void logStackTrace(Throwable oops);
+   void logStackTrace();
+   
+   void logStackTrace(Throwable oops);
 }

@@ -14,13 +14,13 @@
 
 package com.eightycats.litterbox.logging;
 
+import com.eightycats.litterbox.format.ThreadLocalDateFormat;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Date;
-
-import com.eightycats.litterbox.format.ThreadLocalDateFormat;
 
 public class LoggerInstance
     implements LoggerConstants, ILogger
@@ -134,12 +134,12 @@ public class LoggerInstance
     }
 
     @Override
-    public void log (String message)
+    public void log (Object message)
     {
         log(NORMAL, message);
     }
 
-    public void log (int level, String message)
+    public void log (int level, Object message)
     {
         if (isEnabled(level)) {
 
@@ -200,21 +200,27 @@ public class LoggerInstance
     }
 
     @Override
-    public void debug (String message)
+    public void debug (Object message)
     {
         log(DEBUG, message);
     }
 
     @Override
-    public void warning (String message)
+    public void warning (Object message)
     {
         log(WARNING, message);
     }
 
     @Override
-    public void error (String message)
+    public void error (Object message)
     {
         log(ERROR, message);
+    }
+
+    @Override
+    public void logStackTrace ()
+    {
+        logStackTrace(new Exception("trace"));
     }
 
     @Override

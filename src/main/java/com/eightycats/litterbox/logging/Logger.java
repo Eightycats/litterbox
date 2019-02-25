@@ -76,44 +76,49 @@ public class Logger
 
     }
 
-    public static void log (String message)
+    public static void log (Object message)
     {
         log(NORMAL, message);
     }
 
-    public static void log (int level, String message)
+    public static void log (int level, Object message)
     {
         logger.log(level, message);
     }
 
-    public static void log (int level, String message, Class<?> source)
+    public static void log (int level, Object message, Class<?> source)
     {
         log(level, message);
     }
 
-    public static void debug (String message)
+    public static void debug (Object message)
     {
         log(DEBUG, message);
     }
 
-    public static void warning (String message)
+    public static void warning (Object message)
     {
         log(WARNING, message);
     }
 
-    public static void warning (String message, Class<?> source)
+    public static void warning (Object message, Class<?> source)
     {
         log(WARNING, message, source);
     }
 
-    public static void error (String message)
+    public static void error (Object message)
     {
         log(ERROR, message);
     }
 
-    public static void error (String message, Class<?> source)
+    public static void error (Object message, Class<?> source)
     {
         log(ERROR, message, source);
+    }
+
+    public static void logStackTrace ()
+    {
+        logger.logStackTrace();
     }
 
     public static void logStackTrace (Throwable oops)
