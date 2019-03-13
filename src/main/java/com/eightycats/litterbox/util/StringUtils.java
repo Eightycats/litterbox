@@ -84,4 +84,18 @@ public class StringUtils
     {
         return Arrays.binarySearch(PREPOSITIONS_ETC, word.toLowerCase()) < 0;
     }
+
+    /**
+     * Iterates over the list, converts each item to a string, and returns concatenated string.
+     */
+    public static String join(Iterable<?> list, String delimiter) {
+        StringBuilder result = new StringBuilder();
+        for (Object item : list) {
+            if (result.length() > 0) {
+                result.append(delimiter);
+            }
+            result.append(item);
+        }
+        return result.toString();
+    }
 }
