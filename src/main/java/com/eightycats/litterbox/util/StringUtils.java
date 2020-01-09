@@ -14,15 +14,32 @@
 
 package com.eightycats.litterbox.util;
 
-import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class StringUtils
 {
     /**
      * Words that you don't normally bother capitalizing. Must be in sorted order.
      */
-    public static final String[] PREPOSITIONS_ETC = new String[] { "a", "an", "and", "at", "but",
-            "by", "for", "in", "of", "on", "or", "the", "to", "with", };
+    public static final Set<String> PREPOSITIONS_ETC = new HashSet();
+
+    static {
+        PREPOSITIONS_ETC.add("a");
+        PREPOSITIONS_ETC.add("an");
+        PREPOSITIONS_ETC.add("and");
+        PREPOSITIONS_ETC.add("at");
+        PREPOSITIONS_ETC.add("but");
+        PREPOSITIONS_ETC.add("by");
+        PREPOSITIONS_ETC.add("for");
+        PREPOSITIONS_ETC.add("in");
+        PREPOSITIONS_ETC.add("of");
+        PREPOSITIONS_ETC.add("on");
+        PREPOSITIONS_ETC.add("or");
+        PREPOSITIONS_ETC.add("the");
+        PREPOSITIONS_ETC.add("to");
+        PREPOSITIONS_ETC.add("with");
+    }
 
     public static int indexOfIgnoreCase (String string, String substring)
     {
@@ -39,15 +56,21 @@ public class StringUtils
      */
     public static String toTitleCase (String title)
     {
-        StringBuilder result = new StringBuilder();
+        String result = "";
         String[] parts = title.split(" ");
         for (String part : parts) {
-            if (result.length() != 0) {
-                result.append(" ");
+            if (result.length() == 0) {
+                result += toSentenceCase(part, true);
+            } else {
+                result += " ";
+                String word = part.toLowerCase();
+                if (shouldTitleCase(word)) {
+                    word = toSentenceCase(word);
+                }
+                result += word;
             }
-            result.append(toSentenceCase(part.toLowerCase()));
         }
-        return result.toString();
+        return result;
     }
 
     /**
@@ -65,7 +88,7 @@ public class StringUtils
     {
         String result = "";
         if (title != null && !title.isEmpty()) {
-            if (force || shouldTitleCase(title) || result.isEmpty()) {
+            if (force || result.isEmpty()) {
                 result += Character.toUpperCase(title.charAt(0));
                 if (title.length() > 1) {
                     result += title.substring(1);
@@ -82,7 +105,7 @@ public class StringUtils
      */
     public static boolean shouldTitleCase (String word)
     {
-        return Arrays.binarySearch(PREPOSITIONS_ETC, word.toLowerCase()) < 0;
+        return !PREPOSITIONS_ETC.contains(word);
     }
 
     /**
